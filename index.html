@@ -11,39 +11,43 @@
 <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
 </head>
 <body>
+    <script defer type="text/javascript" src="index.js"></script>
     <div class="bodyContainer">
-
+    
         <div class="mainCharacterView left" >
                 <div class="nameBox">USS Schwarzenegger</div>
                 <div class="playerImage"></div>
                 <div class="playerStats">
-
-                Hull : 15 <br>
+                <!-- Hull : 15 <br>
                 FirePower : 5 <br>
-                Accuracy : .7 <br>
-
-z
+                Accuracy : .7 <br> -->
 
                 </div>
 
         </div>
+        <div class="buttons">
+            <button id="attack">Attack</button>
+            <button id="start">Start</button>
+            <button id="reset">Reset</button>
+        </div>
+        
 
 
         <div class="mainCharacterView right">
-           
-            <div class="nameBox">Enemy</div>
-            <div class="enemyImage"></div>
+            <div class="enemy">
+                <div class="enemyNB nameBox">Enemy</div>
+                <div class="enemyImage"></div>
                 <div class="enemyStats">
-                    Hull : 6 <br>
+                    <!-- Hull : 6 <br>
                     FirePower : 3 <br>
-                    Accuracy : .6 <br>
-    
-    
+                    Accuracy : .6 <br> -->
                 </div>
+                <div class="otherEnemies">
+                    
+                </div>
+            </div>
+            
             
         </div>
-
-
-    <script src="app.js"></script>
 </body>
 </html>
