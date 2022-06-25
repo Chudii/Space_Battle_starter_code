@@ -4,10 +4,10 @@
 // object of user spaceship
 // should have hull, firepower, and accuracy props
 
-const activeEnemies = [] // array of ships still active
+let activeEnemies = [] // array of ships still active
 
-const spaceship = {
-    hull: 5,
+let spaceship = {
+    hull: 20,
     firepower: 5,
     accuracy: .7,
     attack(obj) {
@@ -51,189 +51,93 @@ class alienShip {
     }
 }
 
-
-
-let alien1 = new alienShip()
-let alien2 = new alienShip()
-let alien3 = new alienShip()
-let alien4 = new alienShip()
-let alien5 = new alienShip()
-let alien6 = new alienShip()
-
-// THE GAME
-
-console.log(activeEnemies)
-console.log(
-    `You are beginning to attack!`
-)
-
-// ATTACK 1
-
-while (alien1.hull > 0 && spaceship.hull > 0) {
-    spaceship.attack(alien1)
-    if (alien1.hull <= 0) {
-        console.log(activeEnemies)
-    }
-}
-
-
-// ATTACK 2
-while (alien2.hull > 0 && spaceship.hull > 0) {
-    spaceship.attack(alien2)
-    if (alien2.hull <= 0) {
-        console.log(activeEnemies)
-    }
-}
-
-// ATTACK 3
-while (alien3.hull > 0 && spaceship.hull > 0) {
-    spaceship.attack(alien3)
-    if (alien3.hull <= 0) {
-        console.log(activeEnemies)
-    }
-}
-
-// ATTACK 4
-while (alien4.hull > 0 && spaceship.hull > 0) {
-    spaceship.attack(alien4)
-    if (alien4.hull <= 0) {
-        console.log(activeEnemies)
-    }
-}
-
-
-// ATTACK 5
-while (alien5.hull > 0 && spaceship.hull > 0) {
-    spaceship.attack(alien5)
-    if (alien5.hull <= 0) {
-        console.log(activeEnemies)
-    }
-}
-
-
-// ATTACK 6
-while (alien6.hull > 0 && spaceship.hull > 0) {
-    spaceship.attack(alien6)
-    if (alien6.hull <= 0) {
-        console.log(activeEnemies)
-    }
-}
-
 /***********************************************************/
 
-// // accessing playerStats class
-const playerStats = document.querySelector('.playerStats')
-playerStats.innerHTML = 'Hull : 0 <br> FirePower: 0 <br> Accuracy : 0'
+const checkVitals = () => {
+    if (spaceship.hull > 0) {
+     return true
+    } else {
+     return false
+    }
+ }
 
-// // accessing the current attacking enemy
-const enemyStats = document.querySelector('.enemyStats')
-enemyStats.innerHTML = 'Hull : 0 <br> FirePower: 0 <br> Accuracy : 0'
-// playerStats.innerHTML = 'Hull : ' + spaceship.hull + ' <br> ' + 'FirePower : ' + spaceship.firepower + ' <br> ' + 'Accuracy : ' + spaceship.accuracy
-// console.log(playerStats)
-
-
-
-// enemyStats.innerHTML = 'Hull : ' + activeEnemies[0].hull + ' <br> ' + 'FirePower : ' + activeEnemies[0].firepower + ' <br> ' + 'Accuracy : ' + activeEnemies[0].accuracy
-
-// start game by pressing button
-// const startButton = document.getElementById('start');
-// startButton.addEventListener('click', function(evt) {
-//     const enemyBox = document.getElementsByClassName('otherEnemies')[0]
-//     console.log(enemyBox)
-
-//     const cavalry = activeEnemies.slice(1);
-
-//     cavalry.forEach((enemy) => {
-//     let itemDiv = document.createElement('div')
-//     itemDiv.classList.add("enemyImage")
-//     enemyBox.appendChild(itemDiv);
-
-//     // accessing playerStats class
-//     const playerStats = document.querySelector('.playerStats')
-//     playerStats.innerHTML = 'Hull : ' + spaceship.hull + ' <br> ' + 'FirePower : ' + spaceship.firepower + ' <br> ' + 'Accuracy : ' + spaceship.accuracy
-//     console.log(playerStats)
-
-//     // accessing the current attacking enemy
-//     const enemyStats = document.querySelector('.enemyStats')
-//     enemyStats.innerHTML = 'Hull : ' + activeEnemies[0].hull + ' <br> ' + 'FirePower : ' + activeEnemies[0].firepower + ' <br> ' + 'Accuracy : ' + activeEnemies[0].accuracy
-//     evt.preventDefault()
-//     let alien1 = new alienShip()
-//     let alien2 = new alienShip()
-//     let alien3 = new alienShip()
-//     let alien4 = new alienShip()
-//     let alien5 = new alienShip()
-//     let alien6 = new alienShip()
-
-// // THE GAME
-
-// console.log(activeEnemies)
-// console.log(
-//     `You are beginning to attack!`
-// )
-
-// // ATTACK 1
-
-// while (alien1.hull > 0 && spaceship.hull > 0) {
-//     spaceship.attack(alien1)
-//     if (alien1.hull <= 0) {
-//         console.log(activeEnemies)
-//     }
-// }
-
-
-// // ATTACK 2
-// while (alien2.hull > 0 && spaceship.hull > 0) {
-//     spaceship.attack(alien2)
-//     if (alien2.hull <= 0) {
-//         console.log(activeEnemies)
-//     }
-// }
-
-// // ATTACK 3
-// while (alien3.hull > 0 && spaceship.hull > 0) {
-//     spaceship.attack(alien3)
-//     if (alien3.hull <= 0) {
-//         console.log(activeEnemies)
-//     }
-// }
-
-// // ATTACK 4
-// while (alien4.hull > 0 && spaceship.hull > 0) {
-//     spaceship.attack(alien4)
-//     if (alien4.hull <= 0) {
-//         console.log(activeEnemies)
-//     }
-// }
-
-
-// // ATTACK 5
-// while (alien5.hull > 0 && spaceship.hull > 0) {
-//     spaceship.attack(alien5)
-//     if (alien5.hull <= 0) {
-//         console.log(activeEnemies)
-//     }
-// }
-
-
-// // ATTACK 6
-// while (alien6.hull > 0 && spaceship.hull > 0) {
-//     spaceship.attack(alien6)
-//     if (alien6.hull <= 0) {
-//         console.log(activeEnemies)
-//     }
-// }
-// })
+/*
+ */
+const startGame = () => {
+    startButton.style.display = "none"
+    const playerStats = document.querySelector('.playerStats')
+    playerStats.innerHTML = playerStats.innerHTML = 'Hull : ' + spaceship.hull + ' <br> ' + 'FirePower : ' + spaceship.firepower + ' <br> ' + 'Accuracy : ' + spaceship.accuracy
+    const enemyStats = document.querySelector('.enemyStats')
     
-// })
+
+    const enemyBoxes = document.getElementsByClassName('otherEnemies')[0]
+
+    const launchedAttack = () => {
+        let numEnemiesBeforeAttack = activeEnemies.length
+        if (checkVitals()) {
+            if (activeEnemies[0]) {
+                spaceship.attack(activeEnemies[0])
+                if (!(activeEnemies[0])) {
+                    console.log('Winner! Winner! Chicken Dinner!')
+                    playerStats.innerHTML = 'Hull : ' + spaceship.hull + ' <br> ' + 'FirePower : ' + spaceship.firepower + ' <br> ' + 'Accuracy : ' + spaceship.accuracy
+                    enemyStats.innerHTML = 'Hull : 0 <br> FirePower : 0 <br> Accuracy : 0'
+                } else {
+                    playerStats.innerHTML = 'Hull : ' + spaceship.hull + ' <br> ' + 'FirePower : ' + spaceship.firepower + ' <br> ' + 'Accuracy : ' + spaceship.accuracy
+                    enemyStats.innerHTML = 'Hull : ' + activeEnemies[0].hull + ' <br> ' + 'FirePower : ' + activeEnemies[0].firepower + ' <br> ' + 'Accuracy : ' + activeEnemies[0].accuracy
+                }
+                if (numEnemiesBeforeAttack > activeEnemies.length && activeEnemies[0]) {
+                    let itemDiv = document.getElementsByClassName('otherEnemies')[0];
+                    itemDiv.removeChild(itemDiv.firstElementChild)
+                    console.log(itemDiv)
+                }
+            }
+        }
+        
+    }
+
+    let alien1 = new alienShip()
+    let alien2 = new alienShip()
+    let alien3 = new alienShip()
+    let alien4 = new alienShip()
+    let alien5 = new alienShip()
+    let alien6 = new alienShip()
+
+    // remaining aliens who aren't fighting
+    const inactiveEnemies = activeEnemies.slice(1);
+    inactiveEnemies.forEach((inactiveEnemy) => {
+        let itemDiv = document.createElement('div')
+        itemDiv.classList.add("enemyImage")
+        enemyBoxes.appendChild(itemDiv)
+    })
+
+    enemyStats.innerHTML = 'Hull : ' + activeEnemies[0].hull + ' <br> ' + 'FirePower : ' + activeEnemies[0].firepower + ' <br> ' + 'Accuracy : ' + activeEnemies[0].accuracy
+
+    const attackButton = document.getElementById('attack')
+    attackButton.style.display = "block";
+    attackButton.addEventListener('click', launchedAttack)
+}
+
+const resetGame = () => {
+    activeEnemies = []
+    spaceship.hull = 20;
+
+    const attackButton = document.getElementById('attack')
+    startButton.style.display = "block"
+    attackButton.style.display = "none"
+    const playerStats = document.querySelector('.playerStats')
+    playerStats.innerHTML = ''
+    const enemyStats = document.querySelector('.enemyStats')
+    enemyStats.innerHTML = ''
+
+    const enemyBoxes = document.getElementsByClassName('otherEnemies')[0]
+    while (enemyBoxes.hasChildNodes()) {
+        enemyBoxes.removeChild(enemyBoxes.firstChild);
+    }
+}
+
+const startButton = document.getElementById('start');
+startButton.addEventListener('click', startGame)
 
 const resetButton = document.getElementById('reset') 
-resetButton.addEventListener('click',function(evt) {
-
-    // accessing playerStats class
-    const playerStats = document.querySelector('.playerStats')
-    playerStats.innerHTML = 'Hull : ' + spaceship.hull + ' <br> ' + 'FirePower : ' + spaceship.firepower + ' <br> ' + 'Accuracy : ' + spaceship.accuracy
-    console.log(playerStats)
-
-    const enemyStats = document.querySelector('.enemyStats')
-})
+resetButton.addEventListener('click', resetGame)
 
