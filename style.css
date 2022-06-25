@@ -19,40 +19,77 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    margin-left: 60px;
     
 }
 button {
     height: 50px;
-    width: 100px;
+    width: 125px;
     border-radius: 10px;
-    margin: 2px;
     font-family: 'Share Tech Mono', monospace;
+}
+.battleLog {
+    position: fixed;
+    top: 10%;
+    left: center;
+    /* margin-left: 20px; */
+    font-size: 1.2rem;
+}
+#retreat {
+    background-color:crimson;
+    display: none;
+    position: fixed;
+    bottom: 54%;
+    box-shadow: 0px 5px 0px 0px rgb(116, 20, 39);
+}
+#retreat:hover {
+    background-color:rgb(214, 63, 93);
 }
 #attack {
     background-color:rgb(61, 139, 71);
     display: none;
+    position: fixed;
+    bottom: 47%;
+    box-shadow: 0px 5px 0px 0px rgb(27, 88, 35);
+}
+#attack:hover {
+    background-color: rgb(99, 185, 112);
 }
 #start {
-   background-color: rgb(100, 164, 237);
+    position: fixed;
+    background-color: rgb(100, 164, 237);
+    box-shadow: 0px 5px 0px 0px rgb(64, 112, 167);
+}
+#start:hover {
+    background-color: rgb(125, 176, 235);;
 }
 #reset {
+    position: fixed;
+    bottom: 40%;
     background-color: slategrey;
+    box-shadow: 0px 5px 0px 0px rgb(69, 80, 90);
+}
+#reset:hover {
+    background-color: rgb(146, 155, 165);
 }
 .mainCharacterView{
-
-width: 50%;
-display: flex;
-flex-direction: column;
-justify-content: space-around;
-align-items: center;
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
 }
 .left{
-
+    margin-left: 50px;
 }
 .right{
-    
+    margin-right: 50px;
 }
-
+.counter {
+    width: 12vw;
+    height: 5vh;
+    font-size: 1.2vw;
+}
 .nameBox{
     border: 1px solid black;
     width: 25vw;
