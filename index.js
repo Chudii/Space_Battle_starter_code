@@ -1,11 +1,13 @@
 let activeEnemies = [] // array of ships still active
 let hidingEnemies = []
 let crtEnemy = activeEnemies[0]
+const shield = Math.floor((Math.random() * 5) + 1)
 
 let spaceship = {
-    hull: 20,
+    hull: 20 + shield,
     firepower: 5,
     accuracy: .7,
+    recharged: false,
     attack(obj) {
         if (Math.random() < this.accuracy) { // if hit is good
             obj.hull -= this.firepower
@@ -20,27 +22,6 @@ let spaceship = {
             newLog(`You missed & they've returned fire... <br>`, 'shipMiss')
             obj.attack()
         }
-        // let updatedEnemy = { 
-        //     hull: obj.hull,
-        //     firepower: obj.firepower,
-        //     accuracy: obj.accuracy,
-        //     active: obj.active,
-        //     attack() {
-        //         if (Math.random() < this.accuracy) { // if hit is good
-        //             spaceship.hull -= this.firepower;
-        //             if (spaceship.hull <= 0 ) {
-        //                 newLog(`Your ship has been destroyed`, 'gameOver')
-        //             } else {
-        //                 battleLog.innerHTML += `You've been hit, new HP is ${spaceship.hull}`
-        //                 newLog('', 'shipHit')
-        //             }
-        //         } else { // missed hit
-        //             battleLog.innerHTML += 'The alien missed!'
-        //             newLog('', 'enemyMiss')
-        //         }
-        //     }
-        // }
-        // activeEnemies[0] = updatedEnemy;
     }
 }
 
@@ -65,6 +46,7 @@ class alienShip {
             battleLog.innerHTML += 'The alien missed!'
             newLog('', 'enemyMiss')
         }
+        
     }
 }
 
@@ -115,10 +97,11 @@ const startGame = () => {
     const enemyStats = document.querySelector('.enemyStats')
     const enemyBoxes = document.getElementsByClassName('otherEnemies')[0]
     let counter = document.getElementsByClassName('counter')[0]
+    let playerStatus = document.getElementsByClassName('playerStatus')[0]
 
-    battleLog.innerHTML = "Press 'Attack' to destroy the aliens"
+    battleLog.innerHTML = `Press 'Target' to choose a new target<br>Press 'Attack' to destroy the aliens<br>Press 'Reset' to reset the game`
     playerStats.innerHTML = playerStats.innerHTML = 'Hull : ' + spaceship.hull + ' <br> ' + 'FirePower : ' + spaceship.firepower + ' <br> ' + 'Accuracy : ' + spaceship.accuracy
-    
+    playerStatus.innerHTML = `+${shield} Extra Shield Applied`
 
     /***********************************************************\
      * FUNCTIONS
@@ -136,10 +119,10 @@ const startGame = () => {
                         activeEnemies.shift();
                         counter.innerHTML = `${activeEnemies.length} Aliens Remaining`
                         retreatButton.style.display = "block"
-                    } else {
+                    } else { // If the currentEnemy is still alive
                         retreatButton.style.display = "none"
                     }
-                    if (activeEnemies.length === 0) {
+                    if (activeEnemies.length === 0) { // If there are no more enemies
                         newLog(`Good Win Soldier!`, 'gameWon')
                         targetButton.style.display = "none"
                         enemyBoxes.style.display = "none"
@@ -148,7 +131,7 @@ const startGame = () => {
                         playerStats.innerHTML = 'Hull : ' + spaceship.hull + ' <br> ' + 'FirePower : ' + spaceship.firepower + ' <br> ' + 'Accuracy : ' + spaceship.accuracy
                         enemyStats.innerHTML = 'Hull : 0 <br> FirePower : 0 <br> Accuracy : 0'
                         counter.innerHTML = `Mission Completed`
-                    } else if (activeEnemies.length === 1) {
+                    } else if (activeEnemies.length === 1) { // If there is one enemy left
                         enemyBoxes.style.display = "none"
                         playerStats.innerHTML = 'Hull : ' + spaceship.hull + ' <br> ' + 'FirePower : ' + spaceship.firepower + ' <br> ' + 'Accuracy : ' + spaceship.accuracy
                         enemyStats.innerHTML = 'Hull : ' + activeEnemies[0].hull + ' <br> ' + 'FirePower : ' + activeEnemies[0].firepower + ' <br> ' + 'Accuracy : ' + activeEnemies[0].accuracy
@@ -163,6 +146,10 @@ const startGame = () => {
                         counter.innerHTML = `Mission Failed`
                     }
                     console.log(activeEnemies[0])
+                    if (spaceship.hull < 20 && !(spaceship.recharged)) {
+                        rechargeButton.style.display = "block"
+                        
+                    }
                 }
             }
             
@@ -191,6 +178,13 @@ const startGame = () => {
             console.log(activeEnemies)
             enemyStats.innerHTML = 'Hull : ' + crtEnemy.hull + ' <br> ' + 'FirePower : ' + crtEnemy.firepower + ' <br> ' + 'Accuracy : ' + crtEnemy.accuracy
         })  
+    }
+
+    const rechargeShields = () => {
+        spaceship.hull += shield
+        spaceship.recharged = true;
+        rechargeButton.style.display = "none"
+        playerStats.innerHTML = 'Hull : ' + spaceship.hull + ' <br> ' + 'FirePower : ' + spaceship.firepower + ' <br> ' + 'Accuracy : ' + spaceship.accuracy
     }
 
     const eliminate = () => {
@@ -254,17 +248,19 @@ const startGame = () => {
     attackButton.addEventListener('click', launchedAttack)
     targetButton.addEventListener('click', function(evt) {selectTarget(evt)})
     retreatButton.addEventListener('click', retreatGame)
+    rechargeButton.addEventListener('click', rechargeShields)
 
 }
 const resetGame = () => {
     document.location.reload(true);
 }
 
+const rechargeButton = document.getElementById('recharge')
 const targetButton = document.getElementById('target')
 const retreatButton = document.getElementById('retreat')
 const attackButton = document.getElementById('attack')
 
-const startButton = document.getElementById('start');
+const startButton = document.getElementById('start')
 startButton.addEventListener('click', startGame)
 
 const resetButton = document.getElementById('reset') 

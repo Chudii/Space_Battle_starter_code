@@ -83,6 +83,16 @@ button {
 #reset:hover {
     background-color: rgb(146, 155, 165);
 }
+#recharge {
+    position: fixed;
+    display: none;
+    bottom: 43%;
+    background-color: rgb(111, 71, 190);
+    box-shadow: 0px 5px 0px 0px rgb(70, 32, 146);
+}
+#recharge:hover {
+    background-color: mediumpurple;
+}
 .mainCharacterView{
     width: 50%;
     display: flex;
@@ -94,11 +104,17 @@ button {
     margin-left: 50px;
     display: flex;
     max-width: auto;
+    justify-content: space-evenly;
 }
 .right{
     /* margin-right: 50px; */
     display: flex;
     max-width: auto;
+}
+.playerStatus {
+    width: 15vw;
+    height: 5vh;
+    font-size: 1.2vw;
 }
 .counter {
     width: 12vw;
