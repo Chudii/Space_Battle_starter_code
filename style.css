@@ -20,7 +20,7 @@
     align-items: center;
     justify-content: center;
     margin-left: 60px;
-    
+    max-width: 33%;
 }
 button {
     height: 50px;
@@ -39,17 +39,27 @@ button {
     background-color:crimson;
     display: none;
     position: fixed;
-    bottom: 54%;
+    bottom: 71%;
     box-shadow: 0px 5px 0px 0px rgb(116, 20, 39);
 }
 #retreat:hover {
     background-color:rgb(214, 63, 93);
 }
+#target {
+    background-color:rgb(219, 165, 28);
+    display: none;
+    position: fixed;
+    bottom: 64%;
+    box-shadow: 0px 5px 0px 0px rgb(160, 120, 19);
+}
+#target:hover {
+    background-color:rgb(214, 182, 99);
+}
 #attack {
     background-color:rgb(61, 139, 71);
     display: none;
     position: fixed;
-    bottom: 47%;
+    bottom: 57%;
     box-shadow: 0px 5px 0px 0px rgb(27, 88, 35);
 }
 #attack:hover {
@@ -57,6 +67,7 @@ button {
 }
 #start {
     position: fixed;
+    bottom: 57%;
     background-color: rgb(100, 164, 237);
     box-shadow: 0px 5px 0px 0px rgb(64, 112, 167);
 }
@@ -65,7 +76,7 @@ button {
 }
 #reset {
     position: fixed;
-    bottom: 40%;
+    bottom: 50%;
     background-color: slategrey;
     box-shadow: 0px 5px 0px 0px rgb(69, 80, 90);
 }
@@ -81,9 +92,13 @@ button {
 }
 .left{
     margin-left: 50px;
+    display: flex;
+    max-width: auto;
 }
 .right{
-    margin-right: 50px;
+    /* margin-right: 50px; */
+    display: flex;
+    max-width: auto;
 }
 .counter {
     width: 12vw;
@@ -146,7 +161,17 @@ button {
 
     
 }
-
+.enemyImageLarge{
+    border: 1px solidblack;
+    width: 20vw;
+    height: 23.5vh;
+    background-image: url("/images/enemy.gif");
+    background-size: cover ;
+    background-position: center;
+    background-repeat: no-repeat;
+    box-shadow: 0px 0px 20px 10px white;
+    
+}
 .enemyStats{
     display: flex;
     justify-content: center;
@@ -169,9 +194,12 @@ button {
 }
 .otherEnemies {
     display: flex;
+    max-width: 100%;
+    flex-wrap: wrap;
 
 }
 .otherEnemies > .enemyImage {
     width: 8vw;
     height: 10vh;
+    justify-content: center;
 }

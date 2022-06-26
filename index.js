@@ -1,5 +1,6 @@
 let activeEnemies = [] // array of ships still active
 let hidingEnemies = []
+let crtEnemy = activeEnemies[0]
 
 let spaceship = {
     hull: 20,
@@ -7,7 +8,7 @@ let spaceship = {
     accuracy: .7,
     attack(obj) {
         if (Math.random() < this.accuracy) { // if hit is good
-            obj.hull -= this.firepower;
+            obj.hull -= this.firepower
             if (obj.hull <= 0) { // if enemy is eliminated
                 newLog(`Clean Hit! <br> What do you want to do next?`, 'enemyElim')
                 obj.active = false;
@@ -19,6 +20,27 @@ let spaceship = {
             newLog(`You missed & they've returned fire... <br>`, 'shipMiss')
             obj.attack()
         }
+        // let updatedEnemy = { 
+        //     hull: obj.hull,
+        //     firepower: obj.firepower,
+        //     accuracy: obj.accuracy,
+        //     active: obj.active,
+        //     attack() {
+        //         if (Math.random() < this.accuracy) { // if hit is good
+        //             spaceship.hull -= this.firepower;
+        //             if (spaceship.hull <= 0 ) {
+        //                 newLog(`Your ship has been destroyed`, 'gameOver')
+        //             } else {
+        //                 battleLog.innerHTML += `You've been hit, new HP is ${spaceship.hull}`
+        //                 newLog('', 'shipHit')
+        //             }
+        //         } else { // missed hit
+        //             battleLog.innerHTML += 'The alien missed!'
+        //             newLog('', 'enemyMiss')
+        //         }
+        //     }
+        // }
+        // activeEnemies[0] = updatedEnemy;
     }
 }
 
@@ -96,7 +118,7 @@ const startGame = () => {
 
     battleLog.innerHTML = "Press 'Attack' to destroy the aliens"
     playerStats.innerHTML = playerStats.innerHTML = 'Hull : ' + spaceship.hull + ' <br> ' + 'FirePower : ' + spaceship.firepower + ' <br> ' + 'Accuracy : ' + spaceship.accuracy
-    counter.innerHTML = "6 Aliens Remaining"
+    
 
     /***********************************************************\
      * FUNCTIONS
@@ -104,12 +126,13 @@ const startGame = () => {
 
     const launchedAttack = () => {
         let currentAttacker = activeEnemies[0]
-        if (checkVitals()) {
-            if (activeEnemies.length > 0) {
-                if (currentAttacker.active) {
+        if (checkVitals()) { // If the ship is still active
+            if (activeEnemies.length > 0) { // And if the game is still going
+                if (currentAttacker.active) { // And if the currentEnemy is alive
                     spaceship.attack(activeEnemies[0])
-                    if (!(currentAttacker.active)) {
+                    if (!(currentAttacker.active)) { // If the currentEnemy dies
                         eliminate()
+                        updateHidingEnemies()
                         activeEnemies.shift();
                         counter.innerHTML = `${activeEnemies.length} Aliens Remaining`
                         retreatButton.style.display = "block"
@@ -118,6 +141,7 @@ const startGame = () => {
                     }
                     if (activeEnemies.length === 0) {
                         newLog(`Good Win Soldier!`, 'gameWon')
+                        targetButton.style.display = "none"
                         enemyBoxes.style.display = "none"
                         retreatButton.style.display = "none"
                         attackButton.style.display = "none"
@@ -126,6 +150,9 @@ const startGame = () => {
                         counter.innerHTML = `Mission Completed`
                     } else if (activeEnemies.length === 1) {
                         enemyBoxes.style.display = "none"
+                        playerStats.innerHTML = 'Hull : ' + spaceship.hull + ' <br> ' + 'FirePower : ' + spaceship.firepower + ' <br> ' + 'Accuracy : ' + spaceship.accuracy
+                        enemyStats.innerHTML = 'Hull : ' + activeEnemies[0].hull + ' <br> ' + 'FirePower : ' + activeEnemies[0].firepower + ' <br> ' + 'Accuracy : ' + activeEnemies[0].accuracy
+                        counter.innerHTML = `${activeEnemies.length} Aliens Remaining`
                     } else {
                         playerStats.innerHTML = 'Hull : ' + spaceship.hull + ' <br> ' + 'FirePower : ' + spaceship.firepower + ' <br> ' + 'Accuracy : ' + spaceship.accuracy
                         enemyStats.innerHTML = 'Hull : ' + activeEnemies[0].hull + ' <br> ' + 'FirePower : ' + activeEnemies[0].firepower + ' <br> ' + 'Accuracy : ' + activeEnemies[0].accuracy
@@ -135,11 +162,35 @@ const startGame = () => {
                         playerStats.innerHTML = 'Hull : 0 <br> ' + 'FirePower : ' + spaceship.firepower + ' <br> ' + 'Accuracy : ' + spaceship.accuracy
                         counter.innerHTML = `Mission Failed`
                     }
+                    console.log(activeEnemies[0])
                 }
             }
             
         }
         
+    }
+
+    const selectTarget = () => {
+        
+        enemyBoxes.addEventListener('click', function(evt){
+            
+            let target = evt.target
+            console.log(target.id)
+            let enemyBox = document.getElementsByClassName('enemyImage')[target.id - 1]
+            console.log(enemyBox)
+            this.removeEventListener('click', arguments.callee)
+        
+            crtEnemy = activeEnemies[target.id] // new current enemy to be displayed
+            console.log(crtEnemy)
+            activeEnemies[target.id] = activeEnemies[0] // where i click, accepts the value of the current
+            
+            activeEnemies[0] = crtEnemy 
+            hidingEnemies = activeEnemies.slice(1);
+            updateHidingEnemies();
+            // target.innerHTML = `HP ${hidingEnemies[target.id - 1].hull}<br>FP ${hidingEnemies[target.id - 1].firepower}<br>A ${hidingEnemies[target.id - 1].accuracy}`
+            console.log(activeEnemies)
+            enemyStats.innerHTML = 'Hull : ' + crtEnemy.hull + ' <br> ' + 'FirePower : ' + crtEnemy.firepower + ' <br> ' + 'Accuracy : ' + crtEnemy.accuracy
+        })  
     }
 
     const eliminate = () => {
@@ -155,38 +206,53 @@ const startGame = () => {
         for (let i = 0; i < hidingEnemies.length; i++) {
             let itemDiv = document.createElement('div')
             itemDiv.classList.add("enemyImage")
+            itemDiv.setAttribute('id', `${i + 1}`)
+            itemDiv.innerHTML = `HP ${hidingEnemies[i].hull}<br>FP ${hidingEnemies[i].firepower}<br>A ${hidingEnemies[i].accuracy}`
             enemyBoxes.appendChild(itemDiv)
         }
+    }
+
+    const updateHidingEnemies = () => {
+        while (enemyBoxes.hasChildNodes()) {
+            enemyBoxes.removeChild(enemyBoxes.firstChild)
+        }
+        console.log('refreshed enemy images')
+        addHidingEnemies()
     }
 
     const retreatGame = () => {
         newLog(`Spaceship has disappeared`, 'retreat')
         counter.innerHTML = 'Mission Abandoned'
         attackButton.style.display = "none"
+        targetButton.style.display = "none"
         retreatButton.style.display = "none"
 
         playerStats.innerHTML = ''
+    }
+
+    const createEnemies = (num) => {
+        let totalEnemies = new Array(num)
+        for (let i = 0; i < num; i++) {
+            totalEnemies[i] = new alienShip()
+        }
     }
 
     /***********************************************************
      * CREATING ENEMIES
     ************************************************************/
 
-    let alien1 = new alienShip()
-    let alien2 = new alienShip()
-    let alien3 = new alienShip()
-    let alien4 = new alienShip()
-    let alien5 = new alienShip()
-    let alien6 = new alienShip()
+    createEnemies(6);
 
     hidingEnemies = activeEnemies.slice(1);
     addHidingEnemies()
-
+    counter.innerHTML = `${activeEnemies.length} Aliens Remaining`
     enemyStats.innerHTML = 'Hull : ' + activeEnemies[0].hull + ' <br> ' + 'FirePower : ' + activeEnemies[0].firepower + ' <br> ' + 'Accuracy : ' + activeEnemies[0].accuracy
 
     
     attackButton.style.display = "block";
+    targetButton.style.display = "block";
     attackButton.addEventListener('click', launchedAttack)
+    targetButton.addEventListener('click', function(evt) {selectTarget(evt)})
     retreatButton.addEventListener('click', retreatGame)
 
 }
@@ -194,6 +260,7 @@ const resetGame = () => {
     document.location.reload(true);
 }
 
+const targetButton = document.getElementById('target')
 const retreatButton = document.getElementById('retreat')
 const attackButton = document.getElementById('attack')
 
