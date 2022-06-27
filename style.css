@@ -55,6 +55,16 @@ button {
 #target:hover {
     background-color:rgb(214, 182, 99);
 }
+#confirm {
+    background-color:rgb(219, 165, 28);
+    display: none;
+    position: fixed;
+    bottom: 64%;
+    box-shadow: 0px 5px 0px 0px rgb(160, 120, 19);
+}
+#confirm:hover {
+    background-color:rgb(214, 182, 99);
+}
 #attack {
     background-color:rgb(61, 139, 71);
     display: none;
@@ -137,10 +147,14 @@ button {
     width: 12.5vw;
     height: 10vh;
 }
+.points {
+    display: none;
+    
+}
 .playerImage{
     border: 1px solidblack;
-    width: 30vw;
-    height: 40vh;
+    width: 27vw;
+    height: 35vh;
     background-image: url("/images/space_hero.gif");
     background-size: cover ;
     background-position: center;
@@ -159,10 +173,33 @@ button {
     height: 15vh;
     text-align: center;
     font-size: 1.5em;
-    box-shadow: 0px 0px 20px 10px white;
+    box-shadow: 0px 0px 20px 5px white;
     border-radius: 2%;
 
 
+}
+.enemyImage.active {
+    box-shadow: 0px 0px 20px 10px gold;
+}
+.player {
+    display: flex;
+    
+}
+.playerExtra {
+    box-shadow: 0px 0px 10px 2px white;
+}
+.missle {
+    width: 5vw;
+    height: 33%;
+    border: 1px solidblack;
+    background-image: url("/images/missile.png");
+    background-size: cover ;
+    background-position: center;
+    background-repeat: no-repeat;
+
+}
+.missle.fired {
+    opacity: .5;
 }
 .enemyImage{
     border: 1px solidblack;
@@ -172,10 +209,7 @@ button {
     background-size: cover ;
     background-position: center;
     background-repeat: no-repeat;
-    box-shadow: 0px 0px 20px 10px white;
-    
-
-    
+    box-shadow: 0px 0px 20px 5px white;
 }
 .enemyImageLarge{
     border: 1px solidblack;
@@ -198,7 +232,7 @@ button {
     text-align: center;
     font-family: 'Share Tech Mono', monospace;
     font-size: 1.5em;
-    box-shadow: 0px 0px 20px 10px white;
+    box-shadow: 0px 0px 20px 5px white;
 
 }
 .enemy {
