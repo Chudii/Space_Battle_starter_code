@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 .bodyContainer{
     display: flex;
    
@@ -144,12 +145,23 @@ button {
 
 }
 .enemyNB {
-    width: 12.5vw;
+    width: 15vw;
     height: 10vh;
 }
-.points {
-    display: none;
-    
+.score {
+    /* display: none; */
+    display: flex;
+    gap: 0 30px;
+    font-size: 1.2vw;
+    position: relative;
+    bottom: 3%;
+    left: 0%;
+
+}
+.scoreTracker {
+    font-family: 'Press Start 2P', cursive;
+    display: flex;
+    align-items: center;
 }
 .playerImage{
     border: 1px solidblack;
@@ -177,6 +189,16 @@ button {
     border-radius: 2%;
 
 
+}
+.trophy {
+    display: none;
+    width: 3vw;
+    height: 6vh;
+    border: 1px solidblack;
+    background-image: url("/images/trophy.png");
+    background-size: cover ;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 .enemyImage.active {
     box-shadow: 0px 0px 20px 10px gold;
@@ -211,6 +233,12 @@ button {
     background-repeat: no-repeat;
     box-shadow: 0px 0px 20px 5px white;
 }
+.enemyImage.bee {
+    background-image: url("/images/bee.gif");
+}
+.enemyImage.butterfly {
+    background-image: url("/images//butterfly.gif");
+}
 .enemyImageLarge{
     border: 1px solidblack;
     width: 20vw;
@@ -221,6 +249,12 @@ button {
     background-repeat: no-repeat;
     box-shadow: 0px 0px 20px 10px white;
     
+}
+.enemyImageLarge.bee {
+    background-image: url("/images/bee.gif")
+}
+.enemyImageLarge.butterfly {
+    background-image: url("images/butterfly.gif")
 }
 .enemyStats{
     display: flex;
@@ -238,9 +272,9 @@ button {
 .enemy {
     display: flex;
     flex-direction: column;
-    justify-content: space-around;
+    justify-content: space-evenly;
     align-items: center;
-    height: 80%;
+    height: 100%;
 }
 .otherEnemies {
     display: flex;
@@ -252,4 +286,75 @@ button {
     width: 8vw;
     height: 10vh;
     justify-content: center;
+}
+.legend {
+    width: 20vw;
+    height: 35vh;
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    top: 60%;
+    box-shadow: 0px 0px 10px 2px white;
+    background-color: rgb(0, 0, 0);
+    flex-grow: 1;
+}
+.label {
+    font-size: 1.2rem;
+    max-width: 100%;
+    height: 13%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.table {
+    display: flex;
+}
+.bugs {
+    width: 50%;
+}
+.bugsBoss {
+    width: 100%;
+    height: 8vh;
+    grid-area: boss;
+    background-image: url("/images/enemy.gif");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    margin-bottom: 20px;
+}
+.bugsButterfly {
+    width: 100%;
+    height: 8vh;
+    margin-left: .45vw;
+    background-image: url("/images/butterfly.gif");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    margin-bottom: 20px;
+}
+.bugsBee {
+    width: 100%;
+    height: 8vh;
+    margin-left: .45vw;
+    background-image: url("/images/bee.gif");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+.worth {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 1.5rem;
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+.worthBoss {
+
+}
+.worthButterfly {
+    grid-area: butterflyWorth;
+}
+.worthBee {
+    grid-area: beeWorth;
 }

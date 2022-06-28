@@ -4,6 +4,7 @@ let crtEnemy = activeEnemies[0]
 const shield = Math.floor((Math.random() * 5) + 1)
 const numEnemies = 6
 const startingHull = 20
+let points = 0
 
 let spaceship = {
     hull: startingHull + shield,
@@ -30,8 +31,13 @@ let spaceship = {
     missleLaunch(obj) {
         if (Math.random() < this.accuracy) {
             obj.hull -= this.missleDmg
-            newLog(`BOOM! They got obliterated`, 'enemyHit')
-            obj.active = false;
+            if (obj.hull <= 0) {
+                newLog(`BOOM! They got obliterated`, 'enemyHit')
+                obj.active = false;
+            } else {
+                newLog(`HIT! But they're returned fire... <br>`, 'enemyHit')
+                obj.attack()
+            }
         } else {
             newLog(`It missed! Prepare for return fire... <br>`, 'shipMiss')
             obj.attack()
@@ -45,20 +51,23 @@ class alienShip {
         // this.firepower = Math.floor((Math.random() * 3) + 2); // Attack btwn 2-4 
         // this.accuracy = Math.floor((Math.random() * 2) + 6) / 10; // Have either 60, 70 or 80% Accuracy
         this.active = true;
-        if (Math.random() < 0.2){ // These Aliens have a 20% of spawning
-            if (Math.random() < 0.3) { 
-                this.hull = 12; // HP 10
+        if (Math.random() < 0.5){ // These Aliens have a 20% of spawning
+            if (Math.random() < 0.5) { 
+                this.hull = 12; // HP 12
                 this.firepower = 3; // Attack 3 
                 this.accuracy = 0.5; // 50% accurate 
+                this.type = 'boss'
             } else {
                 this.hull = 8; // HP 8
                 this.firepower = 3; // Attack btwn 2-4 
                 this.accuracy = 0.5; // 50% accurate
+                this.type = 'butterfly'
             }
         } else {
             this.hull = Math.floor((Math.random() * 4) + 3); // HP btwn 3-6
             this.firepower = Math.floor((Math.random() * 3) + 2); // Attack btwn 2-4 
             this.accuracy = Math.floor((Math.random() * 2) + 6) / 10; // Have either 60, 70 or 80%
+            this.type = 'bee'
         }
         activeEnemies.push(this)
     }
@@ -79,7 +88,14 @@ class alienShip {
     }
 }
 
+const worthBoss = document.querySelector('.worthBoss')
+const worthButterfly = document.querySelector('.worthButterfly')
+const worthBee = document.querySelector('.worthBee')
 let battleLog = document.getElementsByClassName('battleLog')[0]
+
+worthBoss.innerHTML = `200`
+worthButterfly.innerHTML = `80`
+worthBee.innerHTML = `50`
 battleLog.innerHTML = `Press 'Start' to Play`
 
 const newLog = (string, status) => {
@@ -115,23 +131,35 @@ const checkVitals = () => {
     }
 }
 
+
 const startGame = () => {
     /***********************************************************\
      * CONNECTING TO DOM
     ************************************************************/
 
     startButton.style.display = "none"
+
     let target
+    const legend = document.querySelector('.legend')
+    const enemyName = document.querySelector('.enemyNB')
+    const enemyImageLarge = document.querySelector('.enemyImageLarge')
     const playerStats = document.querySelector('.playerStats')
     const enemyStats = document.querySelector('.enemyStats')
+    const trophy = document.querySelector('.trophy')
+    const scoreTracker = document.querySelector('.scoreTracker')
+    
     const enemyBoxes = document.getElementsByClassName('otherEnemies')[0]
     const playerExtra = document.getElementsByClassName('playerExtra')[0]
     let counter = document.getElementsByClassName('counter')[0]
     let playerStatus = document.getElementsByClassName('playerStatus')[0]
-
+    let score = document.getElementsByClassName('score')[0]
+    
+    legend.style.display = "none"
+    trophy.style.display = "block"
     battleLog.innerHTML = `Press 'Target' to choose a new target<br>Press 'Attack' to destroy the aliens<br>Press 'Reset' to reset the game`
     playerStats.innerHTML = playerStats.innerHTML = 'Hull : ' + spaceship.hull + ' <br> ' + 'FirePower : ' + spaceship.firepower + ' <br> ' + 'Accuracy : ' + spaceship.accuracy
     playerStatus.innerHTML = `+${shield} Extra Shield Applied`
+    
 
     /***********************************************************\
      * FUNCTIONS
@@ -156,6 +184,13 @@ const startGame = () => {
                     if (!(activeEnemies[0].active)) { // If the currentEnemy dies
                         eliminate()
                         updateHidingEnemies()
+                        if(activeEnemies[0].type === 'bee') {
+                            addPoints(50)
+                        } else if (activeEnemies[0].type === 'butterfly') {
+                            addPoints(80)
+                        } else if (activeEnemies[0].type === 'boss') {
+                            addPoints(200)
+                        }
                         activeEnemies.shift();
                         counter.innerHTML = `${activeEnemies.length} Aliens Remaining`
                         retreatButton.style.display = "block"
@@ -165,6 +200,7 @@ const startGame = () => {
                     }
                     if (activeEnemies.length === 0) { // If there are no more enemies
                         newLog(`Good Win Soldier!`, 'gameWon')
+                        battleLog.innerHTML += `<br> Your Score: ${points}`
                         targetButton.style.display = "none"
                         enemyBoxes.style.display = "none"
                         retreatButton.style.display = "none"
@@ -223,18 +259,21 @@ const startGame = () => {
             enemyBox.classList.toggle('active')
         })
         confirmButton.addEventListener('click', function(evt) {
-            confirmButton.style.display = 'none'
-            targetButton.style.display = 'block'
-            battleLog.innerHTML = `Target Acquired.<br>What's your move?`
-            this.removeEventListener('click', arguments.callee)
-            crtEnemy = activeEnemies[target.id] // new current enemy to be displayed
-            activeEnemies[target.id] = activeEnemies[0] // where i click, accepts the value of the current
-            activeEnemies[0] = crtEnemy 
-            hidingEnemies = activeEnemies.slice(1);
-            updateHidingEnemies()
-            // enemyBox = document.getElementsByClassName('enemyImage')[target.id - 1]
-            // this.removeEventListener('click', arguments.callee)
-            enemyStats.innerHTML = 'Hull : ' + crtEnemy.hull + ' <br> ' + 'FirePower : ' + crtEnemy.firepower + ' <br> ' + 'Accuracy : ' + crtEnemy.accuracy
+            if (target) {
+                confirmButton.style.display = 'none'
+                targetButton.style.display = 'block'
+                battleLog.innerHTML = `Target Acquired.<br>What's your move?`
+                this.removeEventListener('click', arguments.callee)
+                crtEnemy = activeEnemies[target.id] // new current enemy to be displayed
+                activeEnemies[target.id] = activeEnemies[0] // where i click, accepts the value of the current
+                target = 0;
+                activeEnemies[0] = crtEnemy 
+                hidingEnemies = activeEnemies.slice(1);
+                updateHidingEnemies()
+                // enemyBox = document.getElementsByClassName('enemyImage')[target.id - 1]
+                // this.removeEventListener('click', arguments.callee)
+                enemyStats.innerHTML = 'Hull : ' + crtEnemy.hull + ' <br> ' + 'FirePower : ' + crtEnemy.firepower + ' <br> ' + 'Accuracy : ' + crtEnemy.accuracy
+            } 
         })
         playerStatus.innerHTML = ''
     }
@@ -260,6 +299,11 @@ const startGame = () => {
         for (let i = 0; i < hidingEnemies.length; i++) {
             let itemDiv = document.createElement('div')
             itemDiv.classList.add("enemyImage")
+            if (hidingEnemies[i].type === 'bee') {
+                itemDiv.classList.add("bee")
+            } else if(hidingEnemies[i].type === 'butterfly') {
+                itemDiv.classList.add("butterfly")
+            }
             itemDiv.setAttribute('id', `${i + 1}`)
             itemDiv.innerHTML = `HP ${hidingEnemies[i].hull}<br>FP ${hidingEnemies[i].firepower}<br>A ${hidingEnemies[i].accuracy}`
             enemyBoxes.appendChild(itemDiv)
@@ -271,6 +315,20 @@ const startGame = () => {
             enemyBoxes.removeChild(enemyBoxes.firstChild)
         }
         addHidingEnemies()
+        updateCurrentEnemy()
+    }
+
+    const updateCurrentEnemy = () => {
+        if (activeEnemies[0].type === 'boss') {
+            enemyName.innerHTML = 'Boss Galaga'
+            enemyImageLarge.style.backgroundImage = "url('/images/enemy.gif')"
+        } else if (activeEnemies[0].type === 'butterfly') {
+            enemyName.innerHTML = 'Goei'
+            enemyImageLarge.style.backgroundImage = "url('/images/butterfly.gif')"
+        } else {
+            enemyName.innerHTML = 'Zako'
+            enemyImageLarge.style.backgroundImage = "url('/images/bee.gif')"
+        }
     }
 
     const retreatGame = () => {
@@ -279,6 +337,7 @@ const startGame = () => {
         attackButton.style.display = "none"
         targetButton.style.display = "none"
         retreatButton.style.display = "none"
+        rechargeButton.style.display = "none"
         playerExtra.style.display = "none"
         playerStatus.innerHTML = ''
         playerStats.innerHTML = ''
@@ -320,15 +379,30 @@ const startGame = () => {
         }
     }
 
+    const addPoints = (num) => { // NEEDS WORK
+        points+=num
+        scoreTracker.innerHTML = `${points}`
+    }
+
+    const toggleLegend = () => {
+        if (legend.style.display === "none") {
+            legend.style.display = 'block'
+        } else {
+            legend.style.display = "none"
+        }
+    }
+
     /***********************************************************
      * CREATING ENEMIES
     ************************************************************/
 
     createEnemies()
     createMissles()
+    updateCurrentEnemy()
 
     hidingEnemies = activeEnemies.slice(1);
     addHidingEnemies()
+    scoreTracker.innerHTML = `${points}`
     counter.innerHTML = `${activeEnemies.length} Aliens Remaining`
     enemyStats.innerHTML = 'Hull : ' + activeEnemies[0].hull + ' <br> ' + 'FirePower : ' + activeEnemies[0].firepower + ' <br> ' + 'Accuracy : ' + activeEnemies[0].accuracy
     
@@ -340,6 +414,10 @@ const startGame = () => {
     targetButton.addEventListener('click', function(evt) {selectTarget(evt)})
     retreatButton.addEventListener('click', retreatGame)
     rechargeButton.addEventListener('click', rechargeShields)
+    trophy.addEventListener('click', function(evt){
+        toggleLegend()
+        
+    })
 
 }
 const resetGame = () => {
