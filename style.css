@@ -85,6 +85,16 @@ button {
 #start:hover {
     background-color: rgb(125, 176, 235);;
 }
+#levelUp {
+    display: none;
+    position: fixed;
+    bottom: 57%;
+    background-color: rgb(100, 164, 237);
+    box-shadow: 0px 5px 0px 0px rgb(64, 112, 167);
+}
+#levelUp:hover {
+    background-color: rgb(125, 176, 235);;
+}
 #reset {
     position: fixed;
     bottom: 50%;
@@ -163,6 +173,13 @@ button {
     display: flex;
     align-items: center;
 }
+.fullPlayer {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+}
 .playerImage{
     border: 1px solidblack;
     width: 27vw;
@@ -172,9 +189,6 @@ button {
     background-position: center;
     background-repeat: no-repeat;
     box-shadow: 0px 0px 20px 10px white;
-    
-
-    
 }
 .playerStats{
     display: flex;
@@ -348,13 +362,4 @@ button {
     display: flex;
     flex-direction: column;
     justify-content: space-around;
-}
-.worthBoss {
-
-}
-.worthButterfly {
-    grid-area: butterflyWorth;
-}
-.worthBee {
-    grid-area: beeWorth;
 }

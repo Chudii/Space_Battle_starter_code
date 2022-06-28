@@ -13,6 +13,7 @@ let spaceship = {
     missles: 3,
     missleDmg: 10,
     recharged: false,
+    leveledUp: false,
     attack(obj) {
         if (Math.random() < this.accuracy) { // if hit is good
             obj.hull -= this.firepower
@@ -42,6 +43,35 @@ let spaceship = {
             newLog(`It missed! Prepare for return fire... <br>`, 'shipMiss')
             obj.attack()
         }
+    },
+    levelUp() {
+        this.hull += 50
+        this.firepower = 8
+        this.accuracy = 0.85
+    }
+}
+
+let enemySpaceship = {
+    active: true,
+    hull: 50,
+    firepower: 8,
+    accuracy: 0.8,
+    type: 'rogue',
+    attack() {
+        if (Math.random() < this.accuracy) { // if hit is good
+            spaceship.hull -= this.firepower;
+            if (spaceship.hull <= 0 ) {
+                newLog(`Your ship has been destroyed`, 'gameOver')
+                gameOver()
+            } else {
+                battleLog.innerHTML += `You've been hit, new HP is ${spaceship.hull}`
+                newLog('', 'shipHit')
+            }
+        } else { // missed hit
+            battleLog.innerHTML += 'The player missed!'
+            newLog('', 'enemyMiss')
+        }
+        
     }
 }
 
@@ -54,7 +84,7 @@ class alienShip {
         if (Math.random() < 0.5){ // These Aliens have a 20% of spawning
             if (Math.random() < 0.5) { 
                 this.hull = 12; // HP 12
-                this.firepower = 3; // Attack 3 
+                this.firepower = 4; // Attack 3 
                 this.accuracy = 0.5; // 50% accurate 
                 this.type = 'boss'
             } else {
@@ -76,6 +106,7 @@ class alienShip {
             spaceship.hull -= this.firepower;
             if (spaceship.hull <= 0 ) {
                 newLog(`Your ship has been destroyed`, 'gameOver')
+                gameOver()
             } else {
                 battleLog.innerHTML += `You've been hit, new HP is ${spaceship.hull}`
                 newLog('', 'shipHit')
@@ -131,6 +162,11 @@ const checkVitals = () => {
     }
 }
 
+const gameOver = () => {
+    targetButton.style.display = "none"
+    rechargeButton.style.display = "none"
+}
+
 
 const startGame = () => {
     /***********************************************************\
@@ -143,11 +179,12 @@ const startGame = () => {
     const legend = document.querySelector('.legend')
     const enemyName = document.querySelector('.enemyNB')
     const enemyImageLarge = document.querySelector('.enemyImageLarge')
+    const playerImage = document.querySelector('.playerImage')
     const playerStats = document.querySelector('.playerStats')
     const enemyStats = document.querySelector('.enemyStats')
     const trophy = document.querySelector('.trophy')
     const scoreTracker = document.querySelector('.scoreTracker')
-    
+    const fullEnemy = document.querySelector('.enemy')
     const enemyBoxes = document.getElementsByClassName('otherEnemies')[0]
     const playerExtra = document.getElementsByClassName('playerExtra')[0]
     let counter = document.getElementsByClassName('counter')[0]
@@ -190,6 +227,8 @@ const startGame = () => {
                             addPoints(80)
                         } else if (activeEnemies[0].type === 'boss') {
                             addPoints(200)
+                        } else if (activeEnemies[0].type === 'rogue') {
+                            addPoints(1000)
                         }
                         activeEnemies.shift();
                         counter.innerHTML = `${activeEnemies.length} Aliens Remaining`
@@ -201,6 +240,10 @@ const startGame = () => {
                     if (activeEnemies.length === 0) { // If there are no more enemies
                         newLog(`Good Win Soldier!`, 'gameWon')
                         battleLog.innerHTML += `<br> Your Score: ${points}`
+                        if (!(spaceship.leveledUp)) {
+                            levelUpButton.style.display = "block"
+                            spaceship.leveledUp = true;
+                        }
                         targetButton.style.display = "none"
                         enemyBoxes.style.display = "none"
                         retreatButton.style.display = "none"
@@ -242,6 +285,8 @@ const startGame = () => {
         playerStatus.innerHTML = ''
     }
 
+    
+
     const selectTarget = (evt) => {
         battleLog.innerHTML = `Select your new target!`
         confirmButton.style.display = "block"
@@ -270,8 +315,6 @@ const startGame = () => {
                 activeEnemies[0] = crtEnemy 
                 hidingEnemies = activeEnemies.slice(1);
                 updateHidingEnemies()
-                // enemyBox = document.getElementsByClassName('enemyImage')[target.id - 1]
-                // this.removeEventListener('click', arguments.callee)
                 enemyStats.innerHTML = 'Hull : ' + crtEnemy.hull + ' <br> ' + 'FirePower : ' + crtEnemy.firepower + ' <br> ' + 'Accuracy : ' + crtEnemy.accuracy
             } 
         })
@@ -323,11 +366,13 @@ const startGame = () => {
             enemyName.innerHTML = 'Boss Galaga'
             enemyImageLarge.style.backgroundImage = "url('/images/enemy.gif')"
         } else if (activeEnemies[0].type === 'butterfly') {
-            enemyName.innerHTML = 'Goei'
+            enemyName.innerHTML = 'Monarch'
             enemyImageLarge.style.backgroundImage = "url('/images/butterfly.gif')"
-        } else {
-            enemyName.innerHTML = 'Zako'
+        } else if (activeEnemies[0].type === 'bee') {
+            enemyName.innerHTML = 'Zipper'
             enemyImageLarge.style.backgroundImage = "url('/images/bee.gif')"
+        } else if (activeEnemies[0].type === 'rogue') {
+            enemyName.innerHTML = 'USS Rogue Fighter'
         }
     }
 
@@ -392,6 +437,27 @@ const startGame = () => {
         }
     }
 
+    const levelUp = () => {
+        playerImage.style.backgroundImage = "url('/images/gray_ship.gif')"
+        enemyImageLarge.style.backgroundImage = "url('/images/enemy_ship.gif')"
+        spaceship.levelUp()
+        playerExtra.style.display = "block"
+        levelUpButton.style.display = "none"
+        attackButton.style.display = "block"
+        activeEnemies.push(enemySpaceship)
+        updateCurrentEnemy()
+        battleLog.innerHTML = `A Rogue Fighter has appeared!<br>Take it down.`
+        enemyName.style.width = '25vw'
+        enemyImageLarge.style.width = '27vw'
+        enemyImageLarge.style.height = '35vh'
+        playerStats.innerHTML = 'Hull : ' + spaceship.hull + ' <br> ' + 'FirePower : ' + spaceship.firepower + ' <br> ' + 'Accuracy : ' + spaceship.accuracy
+        enemyStats.innerHTML = 'Hull : ' + enemySpaceship.hull  + ' <br> ' + 'FirePower : ' + enemySpaceship.firepower + ' <br> ' + 'Accuracy : ' + enemySpaceship.accuracy
+        score.style.display = "none"
+        fullEnemy.style.marginLeft = '60px'
+        counter.style.display = "none"
+        playerStatus.style.display = "none"
+    }
+
     /***********************************************************
      * CREATING ENEMIES
     ************************************************************/
@@ -414,10 +480,8 @@ const startGame = () => {
     targetButton.addEventListener('click', function(evt) {selectTarget(evt)})
     retreatButton.addEventListener('click', retreatGame)
     rechargeButton.addEventListener('click', rechargeShields)
-    trophy.addEventListener('click', function(evt){
-        toggleLegend()
-        
-    })
+    levelUpButton.addEventListener('click', levelUp)
+    trophy.addEventListener('click', function(evt){toggleLegend()})
 
 }
 const resetGame = () => {
@@ -429,7 +493,7 @@ const targetButton = document.getElementById('target')
 const confirmButton = document.getElementById('confirm')
 const retreatButton = document.getElementById('retreat')
 const attackButton = document.getElementById('attack')
-
+const levelUpButton = document.getElementById('levelUp')
 const startButton = document.getElementById('start')
 startButton.addEventListener('click', startGame)
 
