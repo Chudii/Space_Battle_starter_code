@@ -285,8 +285,6 @@ const startGame = () => {
         playerStatus.innerHTML = ''
     }
 
-    
-
     const selectTarget = (evt) => {
         battleLog.innerHTML = `Select your new target!`
         confirmButton.style.display = "block"
@@ -499,6 +497,3 @@ startButton.addEventListener('click', startGame)
 
 const resetButton = document.getElementById('reset') 
 resetButton.addEventListener('click', resetGame)
-
-
-
